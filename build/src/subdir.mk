@@ -4,13 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/HelloEclipse.cpp 
+../src/BasicBox2DApp.cpp \
+../src/Client.cpp 
 
 OBJS += \
-./src/HelloEclipse.o 
+./src/BasicBox2DApp.o \
+./src/Client.o 
 
 CPP_DEPS += \
-./src/HelloEclipse.d 
+./src/BasicBox2DApp.d \
+./src/Client.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

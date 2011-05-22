@@ -233,6 +233,7 @@ namespace cinder
 			bodyFixtureDef.shape = &box;
 			bodyFixtureDef.density = 1.0f;
 			bodyFixtureDef.friction = 0.3f;
+			bodyFixtureDef.restitution = 0.75f;
 			mTempBody->CreateFixture(&bodyFixtureDef);
 
 		}
