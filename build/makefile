@@ -9,6 +9,7 @@ RM := rm
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir.mk
+-include src/osc/subdir.mk
 -include src/b2cinder/subdir.mk
 -include src/subdir.mk
 -include src/Box2D/Dynamics/subdir.mk
@@ -51,7 +52,7 @@ all: CinderBox2dOSC
 CinderBox2dOSC: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MacOS X C++ Linker'
-	g++ -arch i386 -framework Cocoa -framework OpenGL -framework Carbon -framework CoreVideo -framework QTKit -framework QuickTime -framework Accelerate -framework AudioToolbox -framework AudioUnit -framework CoreAudio -Xlinker /Users/onedayitwillmake/GIT/LIBRARY/Cinder/lib/libcinder_d.a -o "CinderBox2dOSC" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -arch i386 -framework Cocoa -framework OpenGL -framework Carbon -framework CoreVideo -framework QTKit -framework QuickTime -framework Accelerate -framework AudioToolbox -framework AudioUnit -framework CoreAudio -Xlinker /Users/onedayitwillmake/GIT/LIBRARY/Cinder/lib/libcinder_d.a /Users/onedayitwillmake/GIT/CinderBox2dOSC/lib/osc.a -o "CinderBox2dOSC" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

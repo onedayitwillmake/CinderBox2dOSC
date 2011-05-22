@@ -26,13 +26,13 @@
 							<builder buildPath="${workspace_loc:/HelloEclipse/Default}" id="cdt.managedbuild.target.gnu.builder.macosx.base.1899808044" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="-19" superClass="cdt.managedbuild.target.gnu.builder.macosx.base"/>
 							<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.base.1372902259" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.base"/>
 							<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.base.293963466" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.base">
-								<option id="macosx.cpp.link.option.paths.606959176" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths"/>
-								<option id="macosx.cpp.link.option.libs.1593998636" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs"/>
+								<option id="macosx.cpp.link.option.paths.606959176" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths"/>
+								<option id="macosx.cpp.link.option.libs.1593998636" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs"/>
 								<option id="macosx.cpp.link.option.other.93030701" name="Other options (-Xlinker [option])" superClass="macosx.cpp.link.option.other" valueType="stringList">
-									<listOptionValue builtIn="false" value="${CINDER_PATH}/lib/libcinder_d.a"/>
+									<listOptionValue builtIn="false" value="${CINDER_PATH}/lib/libcinder_d.a ${workspace_loc:/CinderBox2dOSC/lib/osc.a}"/>
 								</option>
 								<option id="macosx.cpp.link.option.userobjs.442770415" name="Other objects" superClass="macosx.cpp.link.option.userobjs"/>
-								<option id="macosx.cpp.link.option.flags.1225849360" name="Linker flags" superClass="macosx.cpp.link.option.flags" value="-arch i386 -framework Cocoa -framework OpenGL -framework Carbon -framework CoreVideo -framework QTKit -framework QuickTime -framework Accelerate -framework AudioToolbox -framework AudioUnit -framework CoreAudio" valueType="string"/>
+								<option id="macosx.cpp.link.option.flags.1225849360" name="Linker flags" superClass="macosx.cpp.link.option.flags" value="    -arch i386 -framework Cocoa -framework OpenGL -framework Carbon -framework CoreVideo -framework QTKit -framework QuickTime -framework Accelerate -framework AudioToolbox -framework AudioUnit -framework CoreAudio" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.804648217" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -48,6 +48,9 @@
 									<listOptionValue builtIn="false" value="${CINDER_PATH}/boost"/>
 									<listOptionValue builtIn="false" value="${CINDER_PATH}/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CinderBox2dOSC/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CinderBox2dOSC/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CinderBox2dOSC/include/ip}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CinderBox2dOSC/include/osc}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.optimization.level.960717740" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.other.other.1735799906" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -arch i386" valueType="string"/>
