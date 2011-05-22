@@ -121,6 +121,38 @@ void BasicBox2DApp::update()
 					---- type: int32
 					------ value: 65
 				 */
+				console() << "New message received" << std::endl;
+							console() << "Address: " << message.getAddress() << std::endl;
+							console() << "Num Arg: " << message.getNumArgs() << std::endl;
+							for (int i = 0; i < message.getNumArgs(); i++) {
+								console() << "-- Argument " << i << std::endl;
+								console() << "---- type: " << message.getArgTypeName(i) << std::endl;
+								if (message.getArgType(i) == osc::TYPE_INT32){
+									try {
+										console() << "------ value: "<< message.getArgAsInt32(i) << std::endl;
+									}
+									catch (...) {
+										console() << "Exception reading argument as int32" << std::endl;
+									}
+
+								}else if (message.getArgType(i) == osc::TYPE_FLOAT){
+									try {
+										console() << "------ value: " << message.getArgAsFloat(i) << std::endl;
+									}
+									catch (...) {
+										console() << "Exception reading argument as float" << std::endl;
+									}
+								}else if (message.getArgType(i) == osc::TYPE_STRING){
+									try {
+										console() << "------ value: " << message.getArgAsString(i).c_str() << std::endl;
+									}
+									catch (...) {
+										console() << "Exception reading argument as string" << std::endl;
+									}
+
+								}
+							}
+
 				std::string clientid = getClientIdFromMessage( message.getAddress() );
 				int			altIsDown = message.getArgAsInt32(1);
 				int			mouseIsDown = message.getArgAsInt32(2);
@@ -161,9 +193,10 @@ void BasicBox2DApp::update()
 void BasicBox2DApp::updateClients() {
 	for (vector<Client*>::const_iterator iter = _allClients.begin(); iter != _allClients.end(); ++iter) {
 		Client* client = (*iter);
-		if( client->getMouseIsDown() ) {
-
-		}
+		client->update();
+//		if( client->getMouseIsDown() ) {
+//			client->onMouseDrag();
+//		} else
 	}
 }
 
@@ -247,6 +280,7 @@ Client* BasicBox2DApp::getClientWithId( std::string clientid )
 }
 Client* BasicBox2DApp::addClientWithId( std::string clientid ) {
 	Client* aClient = new Client( clientid, "abc" );
+	aClient->setWorld( mSandbox.getWorld() );
 	_allClients.push_back( aClient );
 
 	return NULL;
