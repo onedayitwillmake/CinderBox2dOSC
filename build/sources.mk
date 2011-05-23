@@ -25,12 +25,6 @@ C_UPPER_DEPS :=
 SUBDIRS := \
 src/osc \
 src/b2cinder \
-src/b2cinder/Box2D/Dynamics \
-src/b2cinder/Box2D/Dynamics/Joints \
-src/b2cinder/Box2D/Dynamics/Contacts \
-src/b2cinder/Box2D/Common \
-src/b2cinder/Box2D/Collision \
-src/b2cinder/Box2D/Collision/Shapes \
 src \
 src/Box2D/Dynamics \
 src/Box2D/Dynamics/Joints \
