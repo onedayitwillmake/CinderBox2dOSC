@@ -11,6 +11,12 @@ RM := rm
 -include subdir.mk
 -include src/osc/subdir.mk
 -include src/b2cinder/subdir.mk
+-include src/b2cinder/Box2D/Dynamics/subdir.mk
+-include src/b2cinder/Box2D/Dynamics/Joints/subdir.mk
+-include src/b2cinder/Box2D/Dynamics/Contacts/subdir.mk
+-include src/b2cinder/Box2D/Common/subdir.mk
+-include src/b2cinder/Box2D/Collision/subdir.mk
+-include src/b2cinder/Box2D/Collision/Shapes/subdir.mk
 -include src/subdir.mk
 -include src/Box2D/Dynamics/subdir.mk
 -include src/Box2D/Dynamics/Joints/subdir.mk

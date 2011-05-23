@@ -10,7 +10,7 @@
 
 #include "cinder/Rand.h"
 #include <cstdlib>
-
+#include "Box2D/Common/b2Math.h"
 
 #include "OscListener.h"
 #include "Client.h"
@@ -63,8 +63,32 @@ void BasicBox2DApp::prepareSettings(Settings* settings)
 	settings->setFrameRate(60.0f);
 }
 
+
+/*
+ * b2InvSqrt(float32 x)
+{
+	union
+	{
+		float32 x;
+		int32 i;
+	} convert;
+
+	convert.x = x;
+	float32 xhalf = 0.5f * x;
+	convert.i = 0x5f3759df - (convert.i >> 1);
+	x = convert.x;
+	x = x * (1.5f - xhalf * x * x);
+	return x;
+}
+ */
 void BasicBox2DApp::setup()
 {
+	for (int var = 1; var < 100; ++var) {
+		float regular = 1.0 / ci::math<float>::sqrt(var);
+		float fast = b2InvSqrt(var);
+
+		std::cout << regular << ":" << fast << std::endl;
+	}
 	mSandbox.init();
 //	mSandbox.enableMouseInteraction(this);
 
