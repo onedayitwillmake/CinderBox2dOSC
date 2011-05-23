@@ -38,7 +38,9 @@ public:
 private:
 	ci::Vec2f	_position;
 	bool		_altIsDown;
+	bool		_altWasDown;
 	bool 		_mouseIsDown;
+	bool		_mouseWasDown;
 	std::string _id;
 	std::string _name;
 
