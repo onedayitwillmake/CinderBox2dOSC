@@ -63,6 +63,8 @@ void Client::onMouseDown() {
 
 
 	if(_altIsDown) {
+
+		std::cout << "Creating joint" << std::endl;
 		b2Vec2 p = ci::box2d::Conversions::toPhysics( _position );
 		// Make a small box.
 		b2AABB aabb;
@@ -102,6 +104,7 @@ void Client::onMouseDrag() {
 
 void Client::onMouseUp() {
 	if (mMouseJoint) {
+		std::cout << "Destroying joint" << std::endl;
 		_worldReference->DestroyJoint(mMouseJoint);
 		mMouseJoint = NULL;
 	}
