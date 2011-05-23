@@ -49,8 +49,9 @@ class BasicBox2DApp : public AppBasic {
 private:
 	void addBox( ci::Vec2f position );
 
-	osc::Listener listener;
-	std::vector<Client*> _allClients;
+	osc::Listener			listener;	// OSCListener
+	Client*					_localClient;	// Client that represents us
+	std::vector<Client*>	_allClients;	// All Clients connected
 
     list<Vec2f>		mPoints;
 	Sandbox mSandbox;
@@ -66,47 +67,40 @@ void BasicBox2DApp::prepareSettings(Settings* settings)
 void BasicBox2DApp::setup()
 {
 	mSandbox.init();
-//	mSandbox.enableMouseInteraction(this);
+	_localClient = addClientWithId( LOCAL_CLIENT );
 
-	addClientWithId( "-1" );
-
-	mFont = Font( "Arial", 12.0f );
+	mFont = ci::Font( "Arial", 12.0f );
 	listener.setup(8899);
 }
 
 void BasicBox2DApp::mouseDrag( MouseEvent event )
 {
-	Client* localClient = getClientWithId( LOCAL_CLIENT );
-	localClient->setPosition( getMousePos() );
+	_localClient->setPosition( getMousePos() );
 }
 
 void BasicBox2DApp::mouseDown( MouseEvent event )
 {
-	Client* localClient = getClientWithId( LOCAL_CLIENT );
-	localClient->setPosition( getMousePos() );
-	localClient->setMouseIsDown( true );
+	_localClient->setPosition( getMousePos() );
+	_localClient->setMouseIsDown( true );
 }
 
 void BasicBox2DApp::mouseUp( MouseEvent event )
 {
-	Client* localClient = getClientWithId( LOCAL_CLIENT );
-	localClient->setPosition( getMousePos() );
-	localClient->setMouseIsDown( false );
+	_localClient->setPosition( getMousePos() );
+	_localClient->setMouseIsDown( false );
 }
 
 void BasicBox2DApp::keyDown( KeyEvent event )
 {
-	Client* localClient = getClientWithId( LOCAL_CLIENT );
 	if(event.getCode() == KeyEvent::KEY_z) {
-		localClient->setAltIsDown( true );
+		_localClient->setAltIsDown( true );
 	}
 }
 
 void BasicBox2DApp::keyUp( KeyEvent event )
 {
-	Client* localClient = getClientWithId( LOCAL_CLIENT );
 	if(event.getCode() == KeyEvent::KEY_z) {
-		localClient->setAltIsDown( false );
+		_localClient->setAltIsDown( false );
 	}
 }
 
@@ -163,6 +157,9 @@ void BasicBox2DApp::update()
 					client->setMouseIsDown(mouseIsDown);
 					client->setAltIsDown( altIsDown );
 					client->setPosition( mousePosition );
+				} else {
+					// Don't have this client, add it
+					addClientWithId( clientid );
 				}
 
 			} else if ( command == "drop" ) {
@@ -172,17 +169,6 @@ void BasicBox2DApp::update()
 				console() << "Do not know how to handle command: " << command << std::endl;
 				continue;
 			}
-
-
-
-//	        if(message.getNumArgs() == 2 && message.getArgType(0) == osc::TYPE_INT32 && message.getArgType(1) == osc::TYPE_INT32)
-//	        {
-//	            float xFloat = ((float) message.getArgAsInt32(0)) / 100.0f;
-//	            float yFloat = ((float) message.getArgAsInt32(1)) / 100.0f;
-//
-//	            ci::Vec2f fakeMouse = ci::Vec2f(xFloat * getWindowWidth(), yFloat * getWindowHeight() );
-//	            addBox( fakeMouse );
-//	        };
 	}
 
 	updateClients();
@@ -192,9 +178,6 @@ void BasicBox2DApp::updateClients() {
 	for (vector<Client*>::const_iterator iter = _allClients.begin(); iter != _allClients.end(); ++iter) {
 		Client* client = (*iter);
 		client->update();
-//		if( client->getMouseIsDown() ) {
-//			client->onMouseDrag();
-//		} else
 	}
 }
 
@@ -202,38 +185,7 @@ void BasicBox2DApp::debugOutputAllOSC() {
 	while (listener.hasWaitingMessages()) {
 			osc::Message message;
 			listener.getNextMessage(&message);
-
-			console() << "New message received" << std::endl;
-			console() << "Address: " << message.getAddress() << std::endl;
-			console() << "Num Arg: " << message.getNumArgs() << std::endl;
-			for (int i = 0; i < message.getNumArgs(); i++) {
-				console() << "-- Argument " << i << std::endl;
-				console() << "---- type: " << message.getArgTypeName(i) << std::endl;
-				if (message.getArgType(i) == osc::TYPE_INT32){
-					try {
-						console() << "------ value: "<< message.getArgAsInt32(i) << std::endl;
-					}
-					catch (...) {
-						console() << "Exception reading argument as int32" << std::endl;
-					}
-
-				}else if (message.getArgType(i) == osc::TYPE_FLOAT){
-					try {
-						console() << "------ value: " << message.getArgAsFloat(i) << std::endl;
-					}
-					catch (...) {
-						console() << "Exception reading argument as float" << std::endl;
-					}
-				}else if (message.getArgType(i) == osc::TYPE_STRING){
-					try {
-						console() << "------ value: " << message.getArgAsString(i).c_str() << std::endl;
-					}
-					catch (...) {
-						console() << "Exception reading argument as string" << std::endl;
-					}
-
-				}
-			}
+			debugOutputSingleOSCMessage(message);
 	}
 }
 
@@ -272,7 +224,7 @@ void BasicBox2DApp::debugOutputSingleOSCMessage( osc::Message message ) {
 }
 void BasicBox2DApp::addBox( ci::Vec2f position )
 {
-	BoxElement* b = new BoxElement( position, Vec2f( Rand::randFloat(10.0f,40.0f), Rand::randFloat(10.0f,40.0f) ) );
+	BoxElement* b = new BoxElement( position, Vec2f( Rand::randFloat(50.0f,200.0f), Rand::randFloat(50.0f,200.0f) ) );
 	b->setColor( Color( CM_HSV, Rand::randFloat(0.0f,0.19f) + 180, 0.9f, 1.0f  ) );
 	mSandbox.addElement(b);
 }
@@ -314,13 +266,15 @@ Client* BasicBox2DApp::addClientWithId( std::string clientid ) {
 	aClient->setWorld( mSandbox.getWorld() );
 	_allClients.push_back( aClient );
 
-	return NULL;
+	return aClient;
 }
 Client* BasicBox2DApp::removeClientWithId( std::string clientid ) {
 
+	Client*	removedClient = NULL;
 	vector<Client*>::iterator iter = _allClients.begin();
 	while ( iter != _allClients.end() ) {
 		if( (*iter)->getId() == clientid ) {
+			removedClient = (*iter);
 			iter = _allClients.erase(iter);
 			console() << "Removing client: " << clientid << std::endl;
 		} else {
@@ -328,7 +282,7 @@ Client* BasicBox2DApp::removeClientWithId( std::string clientid ) {
 		}
 	}
 
-	return NULL;
+	return removedClient;
 }
 
 

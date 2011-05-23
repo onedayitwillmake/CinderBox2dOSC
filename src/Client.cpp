@@ -16,7 +16,9 @@ Client::Client( std::string id, std::string name )
 	_id = id;
 	_name = name;
 	_mouseIsDown = false;
+	_mouseWasDown = false;
 	_altIsDown = false;
+	_altWasDown = false;
 	mMouseJoint = NULL;
 }
 
@@ -61,9 +63,8 @@ public:
 
 void Client::onMouseDown() {
 
-
-	if(_altIsDown) {
-
+	std::cout << "onMouseDown" << std::endl;
+	if(_altIsDown && mMouseJoint == NULL) {
 		std::cout << "Creating joint" << std::endl;
 		b2Vec2 p = ci::box2d::Conversions::toPhysics( _position );
 		// Make a small box.
@@ -103,6 +104,8 @@ void Client::onMouseDrag() {
 }
 
 void Client::onMouseUp() {
+	std::cout << "onMouseUp" << std::endl;
+
 	if (mMouseJoint) {
 		std::cout << "Destroying joint" << std::endl;
 		_worldReference->DestroyJoint(mMouseJoint);
@@ -116,8 +119,8 @@ void Client::addBody()
 	float hue = atof( _id.c_str() );
 	if(hue < 0.0) hue += 2.0f; // HACK FOR LOCAL_CLIENT
 
-	hue *= 0.03f;
-	ci::box2d::BoxElement* b = new ci::box2d::BoxElement( _position, ci::Vec2f( ci::Rand::randFloat(10.0f,40.0f), ci::Rand::randFloat(10.0f,40.0f) ) );
+	hue *= 0.045f;
+	ci::box2d::BoxElement* b = new ci::box2d::BoxElement( _position, ci::Vec2f( ci::Rand::randFloat(15.0f,100.0f), ci::Rand::randFloat(15.0f,100.0f) ) );
 	b->setColor( ci::Color( ci::CM_HSV, hue, 0.9f, 1.0f  ) );
 
 	b2Body* mTempBody = _worldReference->CreateBody( b->getBodyDef() );
@@ -134,17 +137,13 @@ void Client::addBody()
 
 
 void Client::update() {
-	static bool mouseWasDown = false;
-	static bool altWasDown = false;
 
-//	std::cout <<  "UPDATE:" << altWasDown << _altIsDown << std::endl;
-
-	if( _mouseIsDown && !mouseWasDown ) {
+	if( _mouseIsDown && !_mouseWasDown ) {
 		onMouseDown();
-		mouseWasDown = true;
-	} else if ( !_mouseIsDown && mouseWasDown ) {
+		_mouseWasDown = true;
+	} else if ( !_mouseIsDown && _mouseWasDown ) {
 		onMouseUp();
-		mouseWasDown = false;
+		_mouseWasDown = false;
 	}
 
 	if(_mouseIsDown) {
