@@ -9,6 +9,8 @@
 #define CLIENT_H_
 #include "cinder/Vector.h"
 #include <Box2D/Box2D.h>
+#include <vector>
+
 
 class Client
 {
@@ -41,6 +43,8 @@ private:
 	bool		_altWasDown;
 	bool 		_mouseIsDown;
 	bool		_mouseWasDown;
+	std::vector<b2Body*>	_bodyList;
+
 	std::string _id;
 	std::string _name;
 

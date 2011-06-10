@@ -57,7 +57,7 @@ namespace cinder{
 			int32 getBodyCount(){ return mWorld->GetBodyCount(); }
 			int32 getContactCount(){ return mWorld->GetContactCount(); }
 			b2Body* getBodyList(){ return mWorld->GetBodyList(); }
-			
+			std::vector<b2Body*>	_bodyList;
 			// some useful settings
 			
 			void setGravity( Vec2f gravity );

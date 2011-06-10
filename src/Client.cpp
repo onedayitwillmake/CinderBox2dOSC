@@ -119,8 +119,8 @@ void Client::addBody()
 	float hue = atof( _id.c_str() );
 	if(hue < 0.0) hue += 2.0f; // HACK FOR LOCAL_CLIENT
 
-	hue *= 0.045f;
-	ci::box2d::BoxElement* b = new ci::box2d::BoxElement( _position, ci::Vec2f( ci::Rand::randFloat(15.0f,100.0f), ci::Rand::randFloat(15.0f,100.0f) ) );
+//	hue *= 0.045f;
+	ci::box2d::BoxElement* b = new ci::box2d::BoxElement( _position, ci::Vec2f( ci::Rand::randFloat(10.0f,50.0f), ci::Rand::randFloat(10.0f,50.0f) ) );
 	b->setColor( ci::Color( ci::CM_HSV, hue, 0.9f, 1.0f  ) );
 
 	b2Body* mTempBody = _worldReference->CreateBody( b->getBodyDef() );
@@ -133,6 +133,15 @@ void Client::addBody()
 
 	// make a circular reference between PhysicsElement and b2Body
 	b->setBody( mTempBody );
+
+//	if( _bodyList.size() > 80 ) {
+//
+//		b2Body* oldBody = *_bodyList.erase( _bodyList.begin() );
+//		_worldReference->DestroyBody( oldBody );
+//	}
+
+
+	_bodyList.push_back( mTempBody );
 }
 
 

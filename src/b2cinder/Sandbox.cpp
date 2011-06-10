@@ -249,8 +249,17 @@ namespace cinder
 				mTempBody->CreateFixture( &*(iter) );
 			}
 
+			if( _bodyList.size() > 80 ) {
+
+				b2Body* oldBody = *_bodyList.erase( _bodyList.begin() );
+				PhysicsElement* oldPhysicsElement = (PhysicsElement*)oldBody->GetUserData();
+				std::cout << "DELETING OLD" << std::endl;
+//				mWorld->DestroyBody()
+			}
 			// make a circular reference between PhysicsElement and b2Body
 			b->setBody( mTempBody );
+
+			_bodyList.push_back( mTempBody );
 		}
 
 		void Sandbox::createBoundaries( Rectf screenBounds )

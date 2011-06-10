@@ -84,12 +84,12 @@ void BasicBox2DApp::prepareSettings(Settings* settings)
  */
 void BasicBox2DApp::setup()
 {
-	for (int var = 1; var < 100; ++var) {
-		float regular = 1.0 / ci::math<float>::sqrt(var);
-		float fast = b2InvSqrt(var);
-
-		std::cout << regular << ":" << fast << std::endl;
-	}
+//	for (int var = 1; var < 100; ++var) {
+//		float regular = 1.0 / ci::math<float>::sqrt(var);
+//		float fast = b2InvSqrt(var);
+//
+//		std::cout << regular << ":" << fast << std::endl;
+//	}
 	mSandbox.init();
 	_localClient = addClientWithId( LOCAL_CLIENT );
 
@@ -144,6 +144,8 @@ void BasicBox2DApp::update()
 			std::string command = message.getArgAsString( 0 );
 
 			if( command == "add" ) {
+				console() << "Adding client: " << command << std::endl;
+
 				addClientWithId( message.getArgAsString(1) );
 			}
 			else if ( command == "mov" ) {
@@ -167,11 +169,9 @@ void BasicBox2DApp::update()
 					---- type: int32
 					------ value: 65
 				 */
-
-
 				std::string clientid = getClientIdFromMessage( message.getAddress() );
 				int			altIsDown = message.getArgAsInt32(1);
-				int			mouseIsDown = message.getArgAsInt32(2);
+				int			mouseIsDown = ci::Rand::randBool();//message.getArgAsInt32(2);
 				float		mouseX = ((float) message.getArgAsInt32(3)) / 100.0f;
 				float		mouseY = ((float) message.getArgAsInt32(4)) / 100.0f;
 	            ci::Vec2f mousePosition = ci::Vec2f(mouseX * getWindowWidth(), mouseY * getWindowHeight() );
